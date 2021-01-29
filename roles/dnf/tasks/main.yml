@@ -1,0 +1,12 @@
+---
+- name: "install packages"
+  dnf:
+    name: "*"
+    state: latest
+
+- name: "install packages"
+  dnf:
+    name:
+      - "{{ item }}"
+    state: latest
+  loop: "{{ packages }}"
