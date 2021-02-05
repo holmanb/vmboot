@@ -1,14 +1,12 @@
 ---
 - name: "install packages"
-  dnf:
-    name: "*"
-    disable_gpg_check: yes
-    state: latest
+  community.general.pacman:
+    update_cache: yes
+    update: yes
 
 - name: "install packages"
-  dnf:
+  community.general.pacman:
     name:
       - "{{ item }}"
     state: latest
-    disable_gpg_check: yes
   loop: "{{ packages }}"

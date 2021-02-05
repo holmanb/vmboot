@@ -1,14 +1,13 @@
 ---
 - name: "install packages"
-  dnf:
+  apt:
     name: "*"
-    disable_gpg_check: yes
-    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
 
 - name: "install packages"
-  dnf:
+  apt:
     name:
       - "{{ item }}"
     state: latest
-    disable_gpg_check: yes
   loop: "{{ packages }}"
