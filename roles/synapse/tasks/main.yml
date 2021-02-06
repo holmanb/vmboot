@@ -34,14 +34,14 @@
     state: started
     enabled: yes
 
-- name: [user command] need to manually set up certbot
+- name: '[user command] need to manually set up certbot'
   debug:
     msg: "sudo certbot certonly --nginx -d {{ url }}"
 
-- name: [user command] manually start server
+- name: '[user command] manually start server'
   debug:
     msg: ". ~/synapse/env/bin/activate && synctl ~/synapse/homeserver.yaml start"
 
-- name: [user command] register new password
+- name: '[user command] register new password'
   debug:
     msg: "register_new_matrix_user -c ~/synapse/homeserver.yaml http://localhost:8008"
