@@ -1,0 +1,36 @@
+--- 
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: ~/synapse
+    state: directory
+
+- name: install virtualenv & deps
+  pip:
+    virtualenv: ~/synapse/env
+    state: latest
+    name:
+      - pip
+      - virtualenv
+      - six
+      - packaging
+      - appdirs
+      - setuptools
+      - matrix-synapse
+
+- name: run matrix module
+  shell: . ~/synapse/env/bin/activate && python3 -m synapse.app.homeserver --server-name "{{ url }}" --config-path ~/synapse/homeserver.yaml --generate-config --report-stats=yes
+
+- name: set up reverse proxy
+  ansible.builtin.template:
+    src: matrix.conf
+    dest: /etc/nginx/conf.d/matrix.conf
+    mode: '0664'
+    owner: root
+    group: root
+
+- name: start and enable nginx
+  ansible.builtin.systemd:
+    name: nginx
+    state: started
+    enabled: yes
+

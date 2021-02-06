@@ -2,7 +2,7 @@
 
 # If the following variable doesn't match a hash key then all vms will be provisioned
 # PROVISION= 'debian'
-PROVISION= ''
+PROVISION= 'synapse'
 
 Vagrant.configure("2") do |config|
 	boxes = {
@@ -23,6 +23,12 @@ Vagrant.configure("2") do |config|
 			'shell' => 'sudo apt-get -y install ansible',
 			'ansible' => 'sudo ansible-playbook /vagrant/ubuntu/ubuntu.yml',
 			'hostname' => 'ubuntu',
+		},
+		'synapse' => {
+			'image' => 'generic/ubuntu2010',
+			'shell' => 'sudo apt-get -y install ansible',
+			'ansible' => 'sudo ansible-playbook /vagrant/synapse/synapse.yml',
+			'hostname' => 'synapse',
 		},
 		'debian' => {
 			'image' => 'debian/buster64',

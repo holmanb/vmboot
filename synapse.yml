@@ -1,0 +1,26 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+  become: true
+  vars:
+    url: 'matrix.phoenix-labs.xyz'
+    packages:
+      - git
+      - build-essential
+      - python3-dev
+      - libffi-dev
+      - python3-pip
+      - python-setuptools
+      - sqlite3
+      - libssl-dev
+      - python3-virtualenv
+      - libjpeg-dev
+      - libxslt1-dev
+      - software-properties-common
+      - certbot
+      - nginx
+      - python3-certbot-nginx
+      - python3-certbot
+  roles:
+    - apt
+    - synapse
