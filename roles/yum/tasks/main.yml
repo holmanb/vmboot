@@ -1,0 +1,14 @@
+---
+- name: "install packages"
+  yum:
+    name: "*"
+    disable_gpg_check: yes
+    state: latest
+
+- name: "install packages"
+  yum:
+    name:
+      - "{{ item }}"
+    state: latest
+    disable_gpg_check: yes
+  loop: "{{ packages }}"
