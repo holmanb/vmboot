@@ -1,0 +1,49 @@
+# -*- mode: ruby -*-
+
+# If the following variable doesn't match a hash key then all vms will be provisioned
+# PROVISION= 'debian'
+PROVISION = 'centos7'
+NUM_BOXES = 2
+
+Vagrant.configure("2") do |config|
+	boxes = {
+		'fedora' => {
+			'image' => 'fedora/33-cloud-base',
+			'shell' => 'sudo dnf -y install ansible',
+			'ansible' => 'sudo ansible-playbook /vagrant/fedora/fedora.yml',
+			'hostname' => 'fedora',
+		},
+		'centos' => {
+			'image' => 'centos/8',
+			'shell' => 'sudo dnf -y install epel-release && sudo dnf -y install ansible',
+			'ansible' => 'sudo ansible-playbook /vagrant/centos/centos.yml',
+			'hostname' => 'centos',
+		},
+		'centos7' => {
+			'image' => 'centos/7',
+			'shell' => 'sudo yum -y install epel-release && sudo yum -y install ansible',
+			'ansible' => 'sudo ansible-playbook /vagrant/centos7/centos7.yml',
+			'hostname' => 'centos7',
+		},
+	}
+
+	(1..NUM_BOXES).each do | num |
+		params = boxes[PROVISION]
+		config.vm.define PROVISION do |box|
+			box.vm.box = params['image']
+			box.vm.hostname = params['hostname'] + "-" + num.to_s
+			box.vm.synced_folder ".", "/vagrant/" + params['hostname'], owner: 'vagrant', group: 'vagrant', create: true, type: 'rsync'
+			#box.vm.network :private_network, ip: "192.168.10." + (100 + num).to_s
+			box.vm.provider "virtualbox" do |vb|
+				vb.customize ["modifyvm", :id, "--cpus", "2", "--paravirtprovider", "kvm", "--ioapic", "on"]
+				vb.memory = 2048
+			end
+			box.vm.provider :libvirt do |v|
+				v.memory = 2048
+				v.cpus = 2
+			end
+			box.vm.provision "shell", inline: params['shell']
+			box.vm.provision "shell", preserve_order: true, inline: params['ansible']
+		end
+	end
+end

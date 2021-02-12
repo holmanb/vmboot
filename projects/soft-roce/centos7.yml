@@ -1,0 +1,24 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+  gather_facts: no
+  become: true
+  vars:
+    packages:
+      - Cython
+      - gcc
+      - git
+      - libfabric
+      - libibverbs
+      - libibverbs-utils
+      - libibcommon
+      - libibmad
+      - libibumad
+      - perftest
+      - python2-pip
+      - python-devel
+      - rdma-core-devel
+      - ucx
+      - vim-enhanced
+  roles:
+    - yum
